@@ -1212,107 +1212,79 @@
         window.open(`https://wa.me/919645594656?text=${text}`, '_blank');
       };
 
-      const mapLocationUrl = "https://maps.google.com/?q=11.088478,75.869255";
-      const embedMapUrl = "https://maps.google.com/maps?q=11.088478,75.869255&z=15&output=embed";
+      const mapLink = "https://maps.google.com/?q=11.088478,75.869255";
+      const mapEmbed = "https://maps.google.com/maps?q=11.088478,75.869255&z=15&output=embed";
 
       return (
         <section id="contact" className="section-padding" style={{ background: '#0a0c10' }}>
           <div className="container">
             <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-              <div className="section-tag">📍 Location & Contact</div>
+              <div className="section-tag">📍 Dojo Location & Contact</div>
               <h2 className="section-title">VISIT OUR <span className="text-green">MARTIAL ARTS DOJO</span></h2>
-              <p className="section-subtitle" style={{ maxWidth: '600px', margin: '0 auto' }}>
-                Located in Kozhikode, Kerala. Drop by our dojo or get in touch with us via WhatsApp or Email.
-              </p>
+              <p className="section-subtitle">Have questions about belt testing, class schedules, or private lessons? Get in touch with our Sensei desk.</p>
             </div>
 
-            <div className="contact-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.1fr', gap: '2rem', marginBottom: '2.5rem' }}>
-              {/* Info Card */}
+            <div className="contact-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '2.5rem', marginBottom: '2.5rem' }}>
               <div className="glass-card" style={{ padding: '2rem', borderRadius: '14px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div>
                   <h3 style={{ color: '#fff', fontSize: '1.3rem', marginBottom: '1.25rem' }}>Dojo Headquarters</h3>
-                  
-                  <div style={{ marginBottom: '1.25rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-                    <span style={{ fontSize: '1.2rem' }}>📍</span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', color: 'var(--text-muted)', fontSize: '0.95rem' }}>
                     <div>
-                      <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>Dojo Location</div>
-                      <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '0.35rem' }}>Kozhikode, Kerala, India</div>
-                      <a 
-                        href={mapLocationUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        style={{ color: 'var(--accent-green)', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'underline' }}
-                      >
-                        📍 Open Location in Google Maps ➔
+                      <strong style={{ color: '#fff' }}>📍 Address:</strong><br />
+                      Kozhikode, Kerala, India
+                    </div>
+                    <div>
+                      <a href="https://wa.me/919645594656" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'var(--accent-gold)', fontWeight: 700 }}>
+                        📞 Phone / WhatsApp: +91 96455 94656
                       </a>
                     </div>
-                  </div>
-
-                  <div style={{ marginBottom: '1.25rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-                    <span style={{ fontSize: '1.2rem' }}>📞</span>
                     <div>
-                      <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>Phone & WhatsApp</div>
-                      <a href="https://wa.me/919645594656" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'var(--accent-gold)', fontWeight: 700, fontSize: '0.9rem' }}>
-                        +91 96455 94656
-                      </a>
-                    </div>
-                  </div>
-
-                  <div style={{ marginBottom: '1.25rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-                    <span style={{ fontSize: '1.2rem' }}>✉️</span>
-                    <div>
-                      <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>Email Inquiries</div>
-                      <a href="mailto:arjunbb441@gmail.com" style={{ textDecoration: 'none', color: 'var(--accent-green)', fontWeight: 700, fontSize: '0.9rem' }}>
-                        arjunbb441@gmail.com
+                      <a href="mailto:litheshariyallur@gmail.com" style={{ textDecoration: 'none', color: 'var(--accent-green)', fontWeight: 700 }}>
+                        ✉️ Email: litheshariyallur@gmail.com
                       </a>
                     </div>
                   </div>
                 </div>
 
-                <a 
-                  href={mapLocationUrl} 
-                  target="_blank" 
+                <a
+                  href={mapLink}
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-secondary" 
-                  style={{ width: '100%', textAlign: 'center', marginTop: '1rem' }}
+                  className="btn-secondary"
+                  style={{ marginTop: '1.5rem', textDecoration: 'none', textAlign: 'center', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
                 >
-                  🗺️ Get Directions on Google Maps
+                  📍 Open Location in Google Maps ↗
                 </a>
               </div>
 
-              {/* Form Card */}
               <div className="glass-card" style={{ padding: '2rem', borderRadius: '14px' }}>
                 <h3 style={{ color: '#fff', fontSize: '1.3rem', marginBottom: '1rem' }}>Send Message via WhatsApp</h3>
                 <form onSubmit={handleSendWhatsApp} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  <input type="text" required placeholder="Your Name" value={name} onChange={e => setName(e.target.value)} style={{ background: 'rgba(10,12,16,0.8)', border: '1px solid var(--border-light)', padding: '0.75rem', borderRadius: '6px', color: '#fff', outline: 'none' }} />
-                  <input type="email" required placeholder="Your Email" value={email} onChange={e => setEmail(e.target.value)} style={{ background: 'rgba(10,12,16,0.8)', border: '1px solid var(--border-light)', padding: '0.75rem', borderRadius: '6px', color: '#fff', outline: 'none' }} />
-                  <textarea rows={4} required placeholder="Your Message or Inquiry..." value={message} onChange={e => setMessage(e.target.value)} style={{ background: 'rgba(10,12,16,0.8)', border: '1px solid var(--border-light)', padding: '0.75rem', borderRadius: '6px', color: '#fff', outline: 'none', resize: 'vertical' }} />
+                  <input type="text" required placeholder="Your Name" value={name} onChange={e => setName(e.target.value)} style={{ background: 'rgba(10,12,16,0.8)', border: '1px solid var(--border-light)', padding: '0.65rem', borderRadius: '6px', color: '#fff', outline: 'none' }} />
+                  <input type="email" required placeholder="Your Email" value={email} onChange={e => setEmail(e.target.value)} style={{ background: 'rgba(10,12,16,0.8)', border: '1px solid var(--border-light)', padding: '0.65rem', borderRadius: '6px', color: '#fff', outline: 'none' }} />
+                  <textarea rows={3} required placeholder="Your Message" value={message} onChange={e => setMessage(e.target.value)} style={{ background: 'rgba(10,12,16,0.8)', border: '1px solid var(--border-light)', padding: '0.65rem', borderRadius: '6px', color: '#fff', outline: 'none' }} />
                   <button type="submit" className="btn-primary">Send Message on WhatsApp 💬</button>
                 </form>
               </div>
             </div>
 
-            {/* Embedded Google Map */}
-            <div className="glass-card" style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid var(--border-green)' }}>
-              <div style={{ padding: '1rem 1.5rem', background: 'rgba(10, 12, 16, 0.9)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
-                <div style={{ color: '#fff', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  🗺️ <span>Black Belt Karate Academy Location Map</span>
+            {/* Embedded Google Map Section */}
+            <div className="glass-card" style={{ padding: '1rem', borderRadius: '16px', border: '1px solid var(--border-green)', overflow: 'hidden' }}>
+              <div style={{ padding: '0.5rem 1rem 1rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <div>
+                  <h4 style={{ color: '#fff', fontSize: '1.1rem', margin: 0 }}>🗺️ Interactive Academy Location Map</h4>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: 0 }}>Black Belt Karate Academy, Kozhikode</p>
                 </div>
-                <a 
-                  href={mapLocationUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  style={{ color: 'var(--accent-gold)', fontSize: '0.85rem', fontWeight: 700, textDecoration: 'none' }}
-                >
-                  View Full Map ➔
+                <a href={mapLink} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-green)', fontSize: '0.85rem', textDecoration: 'none', fontWeight: 600 }}>
+                  Get Directions on Google Maps ↗
                 </a>
               </div>
               <iframe
                 title="Black Belt Karate Academy Location"
-                src={embedMapUrl}
+                src={mapEmbed}
                 width="100%"
                 height="380"
-                style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) contrast(1.2)' }}
+                style={{ border: 0, borderRadius: '12px', display: 'block' }}
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

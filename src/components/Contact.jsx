@@ -45,17 +45,9 @@ export default function Contact() {
                   </div>
                   <div>
                     <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>Dojo Address</div>
-                    <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '0.25rem' }}>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                       Kozhikode, Kerala, India
                     </div>
-                    <a
-                      href="https://maps.google.com/?q=11.088478,75.869255"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: 'var(--accent-green)', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'underline' }}
-                    >
-                      📍 Open Location in Google Maps ➔
-                    </a>
                   </div>
                 </div>
 
@@ -78,7 +70,9 @@ export default function Contact() {
                   <div>
                     <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>Email Inquiries</div>
                     <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                      arjunbb441@gmail.com
+                      <a href="mailto:litheshariyallur@gmail.com" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>
+                        litheshariyallur@gmail.com
+                      </a>
                     </div>
                   </div>
                 </div>
