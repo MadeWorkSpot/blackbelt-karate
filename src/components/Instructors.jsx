@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { INSTRUCTORS } from '../data/karateData';
-import { Shield, ArrowUpRight, X } from 'lucide-react';
+import { Shield, X } from 'lucide-react';
 
 export default function Instructors() {
   const [selectedMaster, setSelectedMaster] = useState(null);
@@ -73,39 +73,11 @@ export default function Instructors() {
                 e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
               }}
             >
-              {/* Zone Ribbon Header */}
-              <div style={{
-                padding: '0.75rem 1.25rem',
-                background: 'rgba(10, 12, 16, 0.85)',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <span style={{
-                  fontSize: '0.72rem',
-                  fontWeight: 700,
-                  letterSpacing: '0.1em',
-                  color: master.badgeColor,
-                  textTransform: 'uppercase',
-                  fontFamily: 'var(--font-subheading)'
-                }}>
-                  {master.zoneTag}
-                </span>
-                <span style={{
-                  fontSize: '0.72rem',
-                  color: 'var(--text-dim)',
-                  fontWeight: 500
-                }}>
-                  {master.zone}
-                </span>
-              </div>
-
               {/* Image Area */}
               <div
                 style={{
                   position: 'relative',
-                  height: '380px',
+                  height: '360px',
                   overflow: 'hidden',
                   background: '#0d1017',
                   cursor: 'pointer'
@@ -120,10 +92,9 @@ export default function Instructors() {
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: master.id === 'grand-master-kakinohana' ? 'contain' : 'cover',
+                    objectFit: 'cover',
                     objectPosition: 'top center',
-                    transition: 'transform 0.4s ease',
-                    padding: master.id === 'grand-master-kakinohana' ? '0.75rem' : 0
+                    transition: 'transform 0.4s ease'
                   }}
                 />
 
@@ -133,84 +104,32 @@ export default function Instructors() {
                   pointerEvents: 'none',
                   background: 'linear-gradient(to top, rgba(10, 12, 16, 0.95) 0%, rgba(10, 12, 16, 0.15) 50%, transparent 100%)'
                 }} />
-
-                {/* Rank Tag overlaid at bottom of photo */}
-                <div style={{
-                  position: 'absolute',
-                  bottom: '1rem',
-                  left: '1rem',
-                  right: '1rem',
-                  zIndex: 2
-                }}>
-                  <div style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    padding: '0.35rem 0.85rem',
-                    borderRadius: '6px',
-                    background: master.badgeBg,
-                    border: `1px solid ${master.accent}`,
-                    color: '#ffffff',
-                    fontWeight: 700,
-                    fontSize: '0.8rem',
-                    fontFamily: 'var(--font-subheading)',
-                    letterSpacing: '0.04em'
-                  }}>
-                    {master.rank}
-                  </div>
-                </div>
               </div>
 
-              {/* Clean & Elegant Content */}
-              <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between' }}>
-                <div>
-                  <div style={{ fontSize: '0.75rem', color: master.accent, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
-                    {master.role}
-                  </div>
-                  <h3 style={{
-                    fontSize: '1.3rem',
-                    color: '#ffffff',
-                    fontFamily: 'var(--font-heading)',
-                    lineHeight: 1.25,
-                    marginBottom: '0.5rem'
-                  }}>
-                    {master.name}
-                  </h3>
-                  <p style={{
-                    fontSize: '0.875rem',
-                    color: 'var(--text-muted)',
-                    lineHeight: 1.6,
-                    marginBottom: '1rem'
-                  }}>
-                    {master.desc}
-                  </p>
-                </div>
-
-                <div style={{
-                  borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-                  paddingTop: '0.85rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between'
+              {/* Content: Only Name and Rank */}
+              <div style={{ padding: '1.25rem 1.25rem 1.5rem', textAlign: 'center', background: 'rgba(13, 16, 23, 0.95)' }}>
+                <h3 style={{
+                  fontSize: '1.25rem',
+                  color: '#ffffff',
+                  fontFamily: 'var(--font-heading)',
+                  lineHeight: 1.3,
+                  marginBottom: '0.5rem'
                 }}>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontStyle: 'italic' }}>
-                    Okinawa Shorin-Kai
-                  </span>
-                  <button
-                    onClick={() => setSelectedMaster(master)}
-                    style={{
-                      background: 'transparent',
-                      border: 'none',
-                      color: master.accent,
-                      fontWeight: 700,
-                      fontSize: '0.82rem',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.25rem'
-                    }}
-                  >
-                    View Portrait <ArrowUpRight size={14} />
-                  </button>
+                  {master.name}
+                </h3>
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: '0.35rem 0.85rem',
+                  borderRadius: '6px',
+                  background: master.badgeBg,
+                  border: `1px solid ${master.accent}`,
+                  color: master.badgeColor || '#ffffff',
+                  fontWeight: 600,
+                  fontSize: '0.8rem',
+                  letterSpacing: '0.02em'
+                }}>
+                  {master.rank}
                 </div>
               </div>
             </div>

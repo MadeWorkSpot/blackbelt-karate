@@ -3,7 +3,7 @@ import { GALLERY_ITEMS } from '../data/karateData';
 import LightboxModal from './LightboxModal';
 import { Maximize2, Camera, ChevronDown, ChevronUp } from 'lucide-react';
 
-const INITIAL_COUNT = 6;
+const INITIAL_COUNT = 4;
 
 export default function Gallery() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);

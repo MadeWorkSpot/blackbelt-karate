@@ -30,7 +30,7 @@ export default function Contact() {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '3rem' }} className="contact-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem', alignItems: 'stretch' }} className="contact-grid">
           {/* Left Dojo Info */}
           <div>
             <div className="glass-card" style={{ padding: '2rem', borderRadius: '16px', marginBottom: '1.5rem' }}>
@@ -224,8 +224,23 @@ export default function Contact() {
                   />
                 </div>
 
-                <button type="submit" className="btn-primary" style={{ padding: '0.85rem' }}>
-                  <Send size={18} /> Send Message
+                <button
+                  type="submit"
+                  className="btn-primary"
+                  style={{
+                    width: '100%',
+                    padding: '0.85rem 1.5rem',
+                    borderRadius: '8px',
+                    fontSize: '0.95rem',
+                    fontWeight: 700,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <Send size={18} /> Submit
                 </button>
               </form>
             )}
