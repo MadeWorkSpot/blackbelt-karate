@@ -758,7 +758,7 @@
     <div class="loader-particles" id="loaderParticles"></div>
 
     <!-- Dojo logo -->
-    <img src="logo.jpg" alt="Okinawa Shorin Kai"
+    <img src="logo.jpg" alt="Okinawa Shorin Kai" onerror="if(!this.dataset.retried){this.dataset.retried='1';this.src='public/logo.jpg';}"
       style="width:72px;height:72px;border-radius:50%;border:3px solid var(--accent-gold);box-shadow:0 0 28px rgba(132,204,22,0.5);animation:giBreathe 2s ease-in-out infinite;">
 
     <!-- Belt tying animation -->
@@ -832,6 +832,29 @@
   <!-- React Babel Script -->
   <script type="text/babel">
     const { useState, useEffect } = React;
+
+    // Resilient Image Error & Fallback Handler (handles root, public/, and alternate filenames)
+    const handleImgError = (e) => {
+      const img = e.currentTarget || e.target;
+      if (!img) return;
+      const currentSrc = img.getAttribute('src') || '';
+      const retryCount = parseInt(img.dataset.retries || '0', 10);
+      if (retryCount >= 3) return;
+      img.dataset.retries = (retryCount + 1).toString();
+
+      // Check for altSrc fallback first
+      if (retryCount === 0 && img.dataset.altSrc) {
+        img.src = img.dataset.altSrc;
+        return;
+      }
+
+      // Toggle between root and public/
+      if (!currentSrc.includes('public/')) {
+        img.src = 'public/' + currentSrc.replace(/^\//, '');
+      } else {
+        img.src = currentSrc.replace(/^\/?public\//, '');
+      }
+    };
 
     // Master Data
     const GALLERY_CATEGORIES = [
@@ -956,13 +979,46 @@
 
     const INSTRUCTORS = [
       {
-        name: 'Hanshi Marcus Vance',
-        rank: '8th Dan Black Belt',
-        title: 'Chief Grandmaster & Founder',
-        experience: '35+ Years Experience',
-        image: 'gallery6.jpg',
-        bio: 'Former World Kumite Champion and certified Okinawan Karate Grandmaster. Trained over 400 national black belts.',
-        specialty: 'Shotokan Kata & Advanced Bunkai'
+        id: 'grand-master-kakinohana',
+        name: 'Hanshi Keishin Kakinohana',
+        rank: '10th Dan Red Belt (Judan)',
+        role: 'Supreme Grand Master (Japan)',
+        zone: 'Okinawa, Japan',
+        zoneTag: 'Japan • Grand Master',
+        image: 'hanshi-keishin-kakinohana.webp',
+        altImage: 'Kakinohohana sensei fighting pic.webp',
+        desc: 'Supreme Grand Master of Okinawa Karate Do Shorin Ryu Shorin Kai, preserving the authentic classical Okinawan lineage and katas worldwide.',
+        accent: '#dc2626',
+        badgeBg: 'rgba(220, 38, 38, 0.25)',
+        badgeColor: '#fca5a5'
+      },
+      {
+        id: 'kyoshi-sunil-kumar',
+        name: 'Kyoshi S. Sunil Kumar',
+        rank: '8th Dan Karate • 7th Dan Kobudo',
+        role: 'Director & Asian Representative',
+        zone: 'Asia & India',
+        zoneTag: 'Asia • Representative',
+        image: 'kyoshi-sunil-kumar.webp',
+        altImage: 'KYOSHI 1.webp',
+        desc: 'Director and Asian Representative overseeing technical grading standards, black belt syllabus, and traditional Okinawan Kobudo weapons.',
+        accent: '#f59e0b',
+        badgeBg: 'rgba(245, 158, 11, 0.25)',
+        badgeColor: '#fde68a'
+      },
+      {
+        id: 'sensei-lithesh',
+        name: 'Sensei Lithesh K.C.',
+        rank: 'Chief Instructor • Master',
+        role: 'Chief Master & Founder',
+        zone: 'Koottumoochi Dojo',
+        zoneTag: 'Academy • Chief Master',
+        image: 'gallery2.jpg',
+        altImage: 'sensei-lithesh-kc.jpg',
+        desc: 'Chief instructor and master of Black Belt Karate Academy, dedicated to authentic dojo discipline, classical kata, kumite, and weapons mastery.',
+        accent: '#84cc16',
+        badgeBg: 'rgba(132, 204, 22, 0.25)',
+        badgeColor: '#bef264'
       }
     ];
 
@@ -999,7 +1055,7 @@
         }}>
           <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <a href="#hero" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
-              <img src="logo.jpg" alt="Logo" className="brand-logo-img" />
+              <img src="logo.jpg" onError={handleImgError} alt="Logo" className="brand-logo-img" />
               <div>
                 <div className="brand-title" style={{ fontFamily: 'var(--font-heading)', fontSize: '1.15rem', fontWeight: 900, color: '#fff', lineHeight: 1 }}>
                   BLACK BELT KARATE ACADEMY
@@ -1098,6 +1154,7 @@
               <div className="glass-card" style={{ padding: '1rem', borderRadius: '16px', border: '1px solid var(--border-green)', position: 'relative' }}>
                 <img
                   src="https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=1200&q=80"
+                  onError={(e) => { e.currentTarget.src = 'gallery1.jpg'; }}
                   alt="Karate Master Kata"
                   style={{ width: '100%', height: '360px', objectFit: 'cover', borderRadius: '12px' }}
                 />
@@ -1106,7 +1163,7 @@
                   background: 'rgba(10,12,16,0.95)', border: '2px solid var(--accent-green)',
                   borderRadius: '50%', padding: '4px', boxShadow: '0 0 20px rgba(132, 204, 22, 0.6)'
                 }}>
-                  <img src="logo.jpg" alt="Logo Emblem" style={{ width: '56px', height: '56px', borderRadius: '50%' }} />
+                  <img src="logo.jpg" onError={handleImgError} alt="Logo Emblem" style={{ width: '56px', height: '56px', borderRadius: '50%' }} />
                 </div>
               </div>
             </div>
@@ -1117,36 +1174,134 @@
 
     function Gallery() {
       const [lightboxIndex, setLightboxIndex] = useState(null);
+      const [showAll, setShowAll] = useState(false);
+
+      const INITIAL_COUNT = 6;
+      const visibleItems = showAll ? GALLERY_ITEMS : GALLERY_ITEMS.slice(0, INITIAL_COUNT);
+      const hiddenCount = GALLERY_ITEMS.length - INITIAL_COUNT;
 
       return (
         <section id="gallery" className="section-padding" style={{ background: '#0a0c10' }}>
           <div className="container">
             <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-              <div className="section-tag">📷 Action Gallery & Dojo Moments</div>
+              <div className="section-tag">📷 Action Gallery &amp; Dojo Moments</div>
               <h2 className="section-title">CAPTURING THE <span className="text-green">SPIRIT OF KARATE</span></h2>
+              <p className="section-subtitle">Explore moments of discipline, tournament victories, kata forms, and belt graduation ceremonies at Black Belt Karate Academy.</p>
             </div>
 
-            {/* Photo Grid - Plain Images */}
+            {/* Photo Grid */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
-              {GALLERY_ITEMS.map((item, idx) => (
+              {visibleItems.map((item, idx) => (
                 <div
                   key={item.id}
                   onClick={() => setLightboxIndex(idx)}
-                  className="glass-card"
-                  style={{ borderRadius: '12px', overflow: 'hidden', height: '280px', cursor: 'pointer', transition: 'transform 0.3s ease' }}
+                  className="glass-card gallery-card"
+                  style={{
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    height: '260px',
+                    cursor: 'pointer',
+                    border: '1px solid rgba(255,255,255,0.07)',
+                    transition: 'transform 0.3s ease, border-color 0.3s ease',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-5px)';
+                    e.currentTarget.style.borderColor = 'rgba(220,38,38,0.5)';
+                    const img = e.currentTarget.querySelector('img');
+                    if (img) img.style.transform = 'scale(1.07)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)';
+                    const img = e.currentTarget.querySelector('img');
+                    if (img) img.style.transform = 'scale(1)';
+                  }}
                 >
-                  <img src={item.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img
+                    src={item.image}
+                    onError={handleImgError}
+                    alt={item.title || 'Gallery'}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.45s ease' }}
+                  />
+                  {/* Zoom badge */}
+                  <div style={{
+                    position: 'absolute', top: '0.75rem', right: '0.75rem',
+                    background: '#dc2626', color: '#fff',
+                    width: '32px', height: '32px', borderRadius: '50%',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '0.75rem', fontWeight: 800,
+                    boxShadow: '0 3px 10px rgba(220,38,38,0.6)', zIndex: 2
+                  }}>⤢</div>
                 </div>
               ))}
             </div>
 
-            {/* Lightbox Modal - Plain Full View */}
+            {/* Show More / Show Less Button */}
+            <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+              {!showAll ? (
+                <button
+                  onClick={() => setShowAll(true)}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.6rem',
+                    padding: '0.9rem 2.4rem',
+                    background: 'linear-gradient(135deg, #dc2626, #991b1b)',
+                    color: '#fff',
+                    border: '1px solid rgba(220,38,38,0.5)',
+                    borderRadius: '10px',
+                    fontSize: '0.95rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    letterSpacing: '0.04em',
+                    boxShadow: '0 6px 24px rgba(220,38,38,0.4)',
+                    transition: 'all 0.25s ease'
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 32px rgba(220,38,38,0.55)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(220,38,38,0.4)'; }}
+                >
+                  ▼ View All {hiddenCount} More Photos
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setShowAll(false);
+                    document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.6rem',
+                    padding: '0.9rem 2.4rem',
+                    background: 'transparent',
+                    color: 'rgba(255,255,255,0.6)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    borderRadius: '10px',
+                    fontSize: '0.95rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    letterSpacing: '0.04em',
+                    transition: 'all 0.25s ease'
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(220,38,38,0.4)'; e.currentTarget.style.color = '#fff'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; }}
+                >
+                  ▲ Show Less
+                </button>
+              )}
+              <p style={{ marginTop: '0.75rem', fontSize: '0.8rem', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.03em' }}>
+                Showing {visibleItems.length} of {GALLERY_ITEMS.length} photos
+              </p>
+            </div>
+
+            {/* Lightbox Modal */}
             {lightboxIndex !== null && (
               <div className="modal-overlay" style={{ padding: 0 }}>
                 <div style={{ position: 'absolute', top: '1.25rem', right: '1.5rem', zIndex: 100 }}>
                   <button
                     onClick={() => setLightboxIndex(null)}
-                    style={{ background: 'var(--accent-green)', color: '#000', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '6px', cursor: 'pointer', fontWeight: 800 }}
+                    style={{ background: '#dc2626', color: '#fff', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '6px', cursor: 'pointer', fontWeight: 800 }}
                   >
                     Close ✕
                   </button>
@@ -1163,6 +1318,7 @@
                   <div style={{ maxWidth: '900px', textAlign: 'center' }}>
                     <img
                       src={GALLERY_ITEMS[lightboxIndex].image}
+                      onError={handleImgError}
                       alt=""
                       style={{ maxHeight: '82vh', maxWidth: '100%', borderRadius: '12px', boxShadow: '0 20px 50px rgba(0,0,0,0.9)', objectFit: 'contain' }}
                     />
@@ -1183,19 +1339,308 @@
     }
 
     function Instructors() {
+      const [selectedMaster, setSelectedMaster] = useState(null);
+
       return (
-        <section id="instructors" className="section-padding" style={{ background: '#0a0c10' }}>
+        <section id="instructors" className="section-padding" style={{ background: '#080a0e', position: 'relative' }}>
           <div className="container">
-            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-              <div className="section-tag">🛡️ Master Sensei</div>
-              <h2 className="section-title">OUR <span className="text-green">MASTER INSTRUCTOR</span></h2>
+            {/* Elegant Header */}
+            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+              <div className="section-tag" style={{ letterSpacing: '0.12em', textTransform: 'uppercase', fontSize: '0.8rem' }}>
+                🥋 Traditional Lineage &amp; Leadership
+              </div>
+              <h2 className="section-title" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '0.03em' }}>
+                MASTERS OF <span className="text-green">OUR DOJO</span>
+              </h2>
+              <p className="section-subtitle" style={{ maxWidth: '640px', margin: '0 auto', fontSize: '0.95rem' }}>
+                Honoring our supreme Okinawan Grand Master in Japan, our Asian Director, and the Chief Master of Black Belt Karate Academy.
+              </p>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <div className="glass-card" style={{ borderRadius: '16px', overflow: 'hidden', maxWidth: '800px', width: '100%', border: '2px solid var(--border-green)', boxShadow: '0 0 30px rgba(132, 204, 22, 0.2)' }}>
-                <img src={INSTRUCTORS[0].image} alt="Master Instructor" style={{ width: '100%', maxHeight: '650px', objectFit: 'cover', objectPosition: 'center', display: 'block' }} />
-              </div>
+            {/* 3-Column Classic Grid */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '2rem',
+              maxWidth: '1180px',
+              margin: '0 auto'
+            }}>
+              {INSTRUCTORS.map((master) => {
+                return (
+                  <div
+                    key={master.id}
+                    className="glass-card"
+                    style={{
+                      borderRadius: '16px',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      boxShadow: '0 12px 35px rgba(0, 0, 0, 0.5)',
+                      transition: 'transform 0.3s ease, border-color 0.3s ease',
+                      position: 'relative',
+                      background: 'rgba(15, 18, 26, 0.75)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-4px)';
+                      e.currentTarget.style.borderColor = master.accent;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    }}
+                  >
+                    {/* Zone Ribbon Header */}
+                    <div style={{
+                      padding: '0.75rem 1.25rem',
+                      background: 'rgba(10, 12, 16, 0.85)',
+                      borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center'
+                    }}>
+                      <span style={{
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        letterSpacing: '0.1em',
+                        color: master.badgeColor,
+                        textTransform: 'uppercase',
+                        fontFamily: 'var(--font-subheading)'
+                      }}>
+                        {master.zoneTag}
+                      </span>
+                      <span style={{
+                        fontSize: '0.72rem',
+                        color: 'var(--text-dim)',
+                        fontWeight: 500
+                      }}>
+                        {master.zone}
+                      </span>
+                    </div>
+
+                    {/* Image Area */}
+                    <div
+                      style={{
+                        position: 'relative',
+                        height: '380px',
+                        overflow: 'hidden',
+                        background: '#0d1017',
+                        cursor: 'pointer'
+                      }}
+                      onClick={() => setSelectedMaster(master)}
+                    >
+                      <img
+                        src={master.image}
+                        data-alt-src={master.altImage}
+                        onError={handleImgError}
+                        alt={master.name}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: master.id === 'grand-master-kakinohana' ? 'contain' : 'cover',
+                          objectPosition: 'top center',
+                          transition: 'transform 0.4s ease',
+                          padding: master.id === 'grand-master-kakinohana' ? '0.75rem' : 0
+                        }}
+                      />
+
+                      <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        pointerEvents: 'none',
+                        background: 'linear-gradient(to top, rgba(10, 12, 16, 0.95) 0%, rgba(10, 12, 16, 0.15) 50%, transparent 100%)'
+                      }} />
+
+                      {/* Rank Tag overlaid at bottom of photo */}
+                      <div style={{
+                        position: 'absolute',
+                        bottom: '1rem',
+                        left: '1rem',
+                        right: '1rem',
+                        zIndex: 2
+                      }}>
+                        <div style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          padding: '0.35rem 0.85rem',
+                          borderRadius: '6px',
+                          background: master.badgeBg,
+                          border: `1px solid ${master.accent}`,
+                          color: '#ffffff',
+                          fontWeight: 700,
+                          fontSize: '0.8rem',
+                          fontFamily: 'var(--font-subheading)',
+                          letterSpacing: '0.04em'
+                        }}>
+                          {master.rank}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Clean & Elegant Content */}
+                    <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between' }}>
+                      <div>
+                        <div style={{ fontSize: '0.75rem', color: master.accent, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+                          {master.role}
+                        </div>
+                        <h3 style={{
+                          fontSize: '1.3rem',
+                          color: '#ffffff',
+                          fontFamily: 'var(--font-heading)',
+                          lineHeight: 1.25,
+                          marginBottom: '0.5rem'
+                        }}>
+                          {master.name}
+                        </h3>
+                        <p style={{
+                          fontSize: '0.875rem',
+                          color: 'var(--text-muted)',
+                          lineHeight: 1.6,
+                          marginBottom: '1rem'
+                        }}>
+                          {master.desc}
+                        </p>
+                      </div>
+
+                      <div style={{
+                        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                        paddingTop: '0.85rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                      }}>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontStyle: 'italic' }}>
+                          Okinawa Shorin-Kai
+                        </span>
+                        <button
+                          onClick={() => setSelectedMaster(master)}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: master.accent,
+                            fontWeight: 700,
+                            fontSize: '0.82rem',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.25rem'
+                          }}
+                        >
+                          View Portrait ↗
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
+
+            {/* Classic Master Lightbox */}
+            {selectedMaster && (
+              <div
+                className="modal-overlay"
+                style={{ padding: '1rem', zIndex: 1000 }}
+                onClick={() => setSelectedMaster(null)}
+              >
+                <div
+                  style={{
+                    position: 'relative',
+                    maxWidth: '820px',
+                    width: '100%',
+                    background: '#0d1017',
+                    borderRadius: '16px',
+                    border: `1px solid ${selectedMaster.accent}`,
+                    boxShadow: '0 25px 60px rgba(0,0,0,0.9)',
+                    overflow: 'hidden'
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    onClick={() => setSelectedMaster(null)}
+                    style={{
+                      position: 'absolute',
+                      top: '1rem',
+                      right: '1rem',
+                      background: 'rgba(20, 24, 34, 0.85)',
+                      color: '#fff',
+                      border: '1px solid var(--border-light)',
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '50%',
+                      cursor: 'pointer',
+                      fontSize: '1rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      zIndex: 10
+                    }}
+                  >
+                    ✕
+                  </button>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+                    <div style={{
+                      background: '#080a0e',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '1.25rem',
+                      minHeight: '400px'
+                    }}>
+                      <img
+                        src={selectedMaster.image}
+                        data-alt-src={selectedMaster.altImage}
+                        onError={handleImgError}
+                        alt={selectedMaster.name}
+                        style={{
+                          maxWidth: '100%',
+                          maxHeight: '480px',
+                          objectFit: 'contain',
+                          borderRadius: '8px'
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                      <span style={{
+                        display: 'inline-block',
+                        padding: '0.25rem 0.65rem',
+                        borderRadius: '4px',
+                        background: selectedMaster.badgeBg,
+                        color: selectedMaster.badgeColor,
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        letterSpacing: '0.05em',
+                        textTransform: 'uppercase',
+                        marginBottom: '0.75rem',
+                        alignSelf: 'flex-start'
+                      }}>
+                        {selectedMaster.zoneTag}
+                      </span>
+
+                      <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', color: '#fff', marginBottom: '0.25rem' }}>
+                        {selectedMaster.name}
+                      </h3>
+                      <div style={{ color: selectedMaster.accent, fontWeight: 700, fontSize: '0.9rem', marginBottom: '0.5rem' }}>
+                        {selectedMaster.rank}
+                      </div>
+
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: '1rem' }}>
+                        {selectedMaster.role} • {selectedMaster.zone}
+                      </div>
+
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', lineHeight: 1.6, marginBottom: '1.25rem' }}>
+                        {selectedMaster.desc}
+                      </p>
+
+                      <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '0.85rem', fontSize: '0.8rem', color: 'var(--accent-gold)' }}>
+                        Okinawa Karate Do Shorin Ryu Shorin Kai
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </section>
       );
@@ -1212,8 +1657,8 @@
         window.open(`https://wa.me/919645594656?text=${text}`, '_blank');
       };
 
-      const mapLink = "https://maps.google.com/?q=11.088478,75.869255";
-      const mapEmbed = "https://maps.google.com/maps?q=11.088478,75.869255&z=15&output=embed";
+      const mapLink = "https://maps.app.goo.gl/wM6PR84cHgg1VBHN7?g_st=aw";
+      const mapEmbed = "https://maps.google.com/maps?q=Black+Belt+Karate+Academy,+Karumarakkad,+Koottumoochi,+Kodakkad,+Kerala+676319&z=15&output=embed";
 
       return (
         <section id="contact" className="section-padding" style={{ background: '#0a0c10' }}>
@@ -1231,7 +1676,7 @@
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', color: 'var(--text-muted)', fontSize: '0.95rem' }}>
                     <div>
                       <strong style={{ color: '#fff' }}>📍 Address:</strong><br />
-                      Kozhikode, Kerala, India
+                      Karumarakkad, Koottumoochi, Kodakkad, Kerala 676319
                     </div>
                     <div>
                       <a href="https://wa.me/919645594656" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'var(--accent-gold)', fontWeight: 700 }}>
@@ -1273,7 +1718,7 @@
               <div style={{ padding: '0.5rem 1rem 1rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
                 <div>
                   <h4 style={{ color: '#fff', fontSize: '1.1rem', margin: 0 }}>🗺️ Interactive Academy Location Map</h4>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: 0 }}>Black Belt Karate Academy, Kozhikode</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: 0 }}>Black Belt Karate Academy, Koottumoochi, Kerala</p>
                 </div>
                 <a href={mapLink} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-green)', fontSize: '0.85rem', textDecoration: 'none', fontWeight: 600 }}>
                   Get Directions on Google Maps ↗
@@ -1306,7 +1751,7 @@
 
           <footer style={{ background: '#05070a', borderTop: '1px solid var(--border-green)', padding: '3rem 0 2rem 0', color: 'var(--text-muted)', textAlign: 'center' }}>
             <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <img src="logo.jpg" alt="Logo" style={{ width: '64px', height: '64px', borderRadius: '50%', marginBottom: '1rem', border: '2px solid var(--accent-green)' }} />
+              <img src="logo.jpg" onError={handleImgError} alt="Logo" style={{ width: '64px', height: '64px', borderRadius: '50%', marginBottom: '1rem', border: '2px solid var(--accent-green)' }} />
               <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1.2rem', color: '#fff', marginBottom: '0.25rem' }}>
                 BLACK BELT KARATE ACADEMY
               </div>

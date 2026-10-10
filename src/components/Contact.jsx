@@ -46,7 +46,7 @@ export default function Contact() {
                   <div>
                     <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>Dojo Address</div>
                     <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                      Kozhikode, Kerala, India
+                      Karumarakkad, Koottumoochi, Kodakkad, Kerala 676319
                     </div>
                   </div>
                 </div>
@@ -90,6 +90,16 @@ export default function Contact() {
                     </div>
                   </div>
                 </div>
+
+                <a
+                  href="https://maps.app.goo.gl/wM6PR84cHgg1VBHN7?g_st=aw"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary"
+                  style={{ marginTop: '0.5rem', textDecoration: 'none', textAlign: 'center', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid rgba(220, 38, 38, 0.4)', color: '#fff', fontSize: '0.9rem', fontWeight: 600 }}
+                >
+                  <MapPin size={18} color="#dc2626" /> Open in Google Maps ↗
+                </a>
               </div>
             </div>
           </div>
@@ -220,6 +230,36 @@ export default function Contact() {
               </form>
             )}
           </div>
+        </div>
+
+        {/* Embedded Google Map Section */}
+        <div className="glass-card" style={{ marginTop: '2.5rem', padding: '1.25rem', borderRadius: '16px', border: '1px solid var(--border-light)', overflow: 'hidden' }}>
+          <div style={{ padding: '0.25rem 0.5rem 1rem 0.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div>
+              <h4 style={{ color: '#fff', fontSize: '1.1rem', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <MapPin size={18} color="#dc2626" /> Interactive Academy Location Map
+              </h4>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: '0.25rem 0 0 0' }}>Black Belt Karate Academy, Koottumoochi, Kerala</p>
+            </div>
+            <a
+              href="https://maps.app.goo.gl/wM6PR84cHgg1VBHN7?g_st=aw"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: '#f59e0b', fontSize: '0.85rem', textDecoration: 'none', fontWeight: 600 }}
+            >
+              Get Directions on Google Maps ↗
+            </a>
+          </div>
+          <iframe
+            title="Black Belt Karate Academy Location"
+            src="https://maps.google.com/maps?q=Black+Belt+Karate+Academy,+Karumarakkad,+Koottumoochi,+Kodakkad,+Kerala+676319&z=15&output=embed"
+            width="100%"
+            height="380"
+            style={{ border: 0, borderRadius: '12px', display: 'block' }}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
         </div>
       </div>
 

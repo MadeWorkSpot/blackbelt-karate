@@ -252,31 +252,46 @@ export const PROGRAMS = [
 
 export const INSTRUCTORS = [
   {
-    name: 'Hanshi Marcus Vance',
-    rank: '8th Dan Black Belt',
-    title: 'Chief Grandmaster & Founder',
-    experience: '35+ Years Experience',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
-    bio: 'Former World Kumite Champion and certified Okinawan Karate Grandmaster. Trained over 400 national black belts.',
-    specialty: 'Shotokan Kata & Advanced Bunkai'
+    id: 'grand-master-kakinohana',
+    name: 'Hanshi Keishin Kakinohana',
+    rank: '10th Dan Red Belt (Judan)',
+    role: 'Supreme Grand Master (Japan)',
+    zone: 'Okinawa, Japan',
+    zoneTag: 'Japan • Grand Master',
+    image: 'hanshi-keishin-kakinohana.webp',
+    altImage: 'Kakinohohana sensei fighting pic.webp',
+    desc: 'Supreme Grand Master of Okinawa Karate Do Shorin Ryu Shorin Kai, preserving the authentic classical Okinawan lineage and katas worldwide.',
+    accent: '#dc2626',
+    badgeBg: 'rgba(220, 38, 38, 0.25)',
+    badgeColor: '#fca5a5'
   },
   {
-    name: 'Sensei Elena Rostova',
-    rank: '5th Dan Black Belt',
-    title: 'Head Youth & Female Self-Defense Coach',
-    experience: '18 Years Experience',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
-    bio: 'National Gold Medalist in Female Kumite. Dedicated to empowering young athletes with unyielding confidence.',
-    specialty: 'Kumite Strategy & Youth Leadership'
+    id: 'kyoshi-sunil-kumar',
+    name: 'Kyoshi S. Sunil Kumar',
+    rank: '8th Dan Karate • 7th Dan Kobudo',
+    role: 'Director & Asian Representative',
+    zone: 'Asia & India',
+    zoneTag: 'Asia • Representative',
+    image: 'kyoshi-sunil-kumar.webp',
+    altImage: 'KYOSHI 1.webp',
+    desc: 'Director and Asian Representative overseeing technical grading standards, black belt syllabus, and traditional Okinawan Kobudo weapons.',
+    accent: '#f59e0b',
+    badgeBg: 'rgba(245, 158, 11, 0.25)',
+    badgeColor: '#fde68a'
   },
   {
-    name: 'Sensei Kenji Takahashi',
-    rank: '4th Dan Black Belt',
-    title: 'Senior Dojo Instructor',
-    experience: '14 Years Experience',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
-    bio: 'Specialist in traditional Okinawan weapon forms (Kobudo) and biomechanical strike precision.',
-    specialty: 'Kobudo & Conditioning'
+    id: 'sensei-lithesh',
+    name: 'Sensei Lithesh K.C.',
+    rank: 'Chief Instructor • Master',
+    role: 'Chief Master & Founder',
+    zone: 'Koottumoochi Dojo',
+    zoneTag: 'Academy • Chief Master',
+    image: 'gallery2.jpg',
+    altImage: 'sensei-lithesh-kc.jpg',
+    desc: 'Chief instructor and master of Black Belt Karate Academy, dedicated to authentic dojo discipline, classical kata, kumite, and weapons mastery.',
+    accent: '#84cc16',
+    badgeBg: 'rgba(132, 204, 22, 0.25)',
+    badgeColor: '#bef264'
   }
 ];
 

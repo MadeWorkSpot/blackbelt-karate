@@ -147,7 +147,7 @@ export default function Navbar({ onOpenBooking }) {
       <div style={styles.container}>
         {/* Brand Logo */}
         <a href="#hero" style={styles.brand}>
-          <img src="logo.jpg" alt="Okinawa Shorin Kai Logo" style={styles.logoImg} />
+          <img src="logo.jpg" onError={(e) => { e.currentTarget.src = 'public/logo.jpg'; }} alt="Okinawa Shorin Kai Logo" style={styles.logoImg} />
           <div>
             <div style={styles.brandTitle}>OKINAWA SHORIN KAI</div>
             <div style={styles.brandSub}>BLACK BELT KARATE ACADEMY • 尚倫會</div>

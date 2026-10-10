@@ -82,7 +82,7 @@ export default function Footer() {
         <div style={s.grid}>
           {/* Brand Column */}
           <div>
-            <img src="logo.jpg" alt="Okinawa Shorin Kai Logo" style={s.logoImg} />
+            <img src="logo.jpg" onError={(e) => { e.currentTarget.src = 'public/logo.jpg'; }} alt="Okinawa Shorin Kai Logo" style={s.logoImg} />
             <div style={{ fontFamily: "'Cinzel', serif", fontSize: '1.1rem', fontWeight: 900, color: '#fff', marginBottom: '0.25rem' }}>
               OKINAWA SHORIN KAI
             </div>

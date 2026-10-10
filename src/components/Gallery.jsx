@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { GALLERY_ITEMS } from '../data/karateData';
 import LightboxModal from './LightboxModal';
-import { Maximize2, Camera } from 'lucide-react';
+import { Maximize2, Camera, ChevronDown, ChevronUp } from 'lucide-react';
+
+const INITIAL_COUNT = 6;
 
 export default function Gallery() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+  const [showAll, setShowAll] = useState(false);
+
+  const visibleItems = showAll ? GALLERY_ITEMS : GALLERY_ITEMS.slice(0, INITIAL_COUNT);
+  const hiddenCount = GALLERY_ITEMS.length - INITIAL_COUNT;
 
   const handleOpenLightbox = (index) => {
     setSelectedImageIndex(index);
@@ -24,13 +30,28 @@ export default function Gallery() {
     setSelectedImageIndex((prev) => (prev === GALLERY_ITEMS.length - 1 ? 0 : prev + 1));
   };
 
+  const handleImgError = (e) => {
+    const img = e.currentTarget || e.target;
+    if (!img) return;
+    const currentSrc = img.getAttribute('src') || '';
+    const retries = parseInt(img.dataset.retries || '0', 10);
+    if (retries >= 3) return;
+    img.dataset.retries = (retries + 1).toString();
+
+    if (!currentSrc.includes('public/')) {
+      img.src = 'public/' + currentSrc.replace(/^\//, '');
+    } else {
+      img.src = currentSrc.replace(/^\/?public\//, '');
+    }
+  };
+
   return (
     <section id="gallery" className="section-padding" style={{ background: '#0a0b0e', position: 'relative' }}>
       <div className="container">
         {/* Section Header */}
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <div className="section-tag">
-            <Camera size={16} /> Action Gallery & Dojo Moments
+            <Camera size={16} /> Action Gallery &amp; Dojo Moments
           </div>
           <h2 className="section-title">
             CAPTURING THE <span className="text-red">SPIRIT OF KARATE</span>
@@ -46,7 +67,7 @@ export default function Gallery() {
           gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
           gap: '1.75rem'
         }}>
-          {GALLERY_ITEMS.map((item, index) => (
+          {visibleItems.map((item, index) => (
             <div
               key={item.id}
               onClick={() => handleOpenLightbox(index)}
@@ -59,7 +80,9 @@ export default function Gallery() {
                 cursor: 'pointer',
                 height: '280px',
                 boxShadow: '0 10px 25px rgba(0, 0, 0, 0.5)',
-                transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)'
+                transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
+                animation: 'fadeInUp 0.4s ease both',
+                animationDelay: `${(index % INITIAL_COUNT) * 0.05}s`
               }}
               className="gallery-card"
               onMouseEnter={(e) => {
@@ -82,6 +105,7 @@ export default function Gallery() {
               {/* Photo Image */}
               <img
                 src={item.image}
+                onError={handleImgError}
                 alt={item.title}
                 style={{
                   width: '100%',
@@ -160,6 +184,86 @@ export default function Gallery() {
             </div>
           ))}
         </div>
+
+        {/* Show More / Show Less */}
+        <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+          {!showAll ? (
+            <button
+              onClick={() => setShowAll(true)}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.6rem',
+                padding: '0.9rem 2.2rem',
+                background: 'linear-gradient(135deg, #dc2626, #991b1b)',
+                color: '#fff',
+                border: '1px solid rgba(220, 38, 38, 0.5)',
+                borderRadius: '10px',
+                fontSize: '0.95rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                letterSpacing: '0.04em',
+                boxShadow: '0 6px 24px rgba(220, 38, 38, 0.35)',
+                transition: 'all 0.25s ease',
+                fontFamily: 'var(--font-subheading)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 10px 32px rgba(220, 38, 38, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 6px 24px rgba(220, 38, 38, 0.35)';
+              }}
+            >
+              <ChevronDown size={18} />
+              View All {hiddenCount} More Photos
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setShowAll(false);
+                document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.6rem',
+                padding: '0.9rem 2.2rem',
+                background: 'transparent',
+                color: 'var(--text-muted)',
+                border: '1px solid var(--border-light)',
+                borderRadius: '10px',
+                fontSize: '0.95rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                letterSpacing: '0.04em',
+                transition: 'all 0.25s ease',
+                fontFamily: 'var(--font-subheading)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(220, 38, 38, 0.4)';
+                e.currentTarget.style.color = '#fff';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'var(--border-light)';
+                e.currentTarget.style.color = 'var(--text-muted)';
+              }}
+            >
+              <ChevronUp size={18} />
+              Show Less
+            </button>
+          )}
+
+          <p style={{
+            marginTop: '0.75rem',
+            fontSize: '0.8rem',
+            color: 'var(--text-dim)',
+            letterSpacing: '0.03em'
+          }}>
+            Showing {visibleItems.length} of {GALLERY_ITEMS.length} photos
+          </p>
+        </div>
       </div>
 
       {/* Lightbox Modal Render */}
@@ -173,6 +277,15 @@ export default function Gallery() {
           onNext={handleNext}
         />
       )}
+
+      <style>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(18px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </section>
   );
 }
+
+

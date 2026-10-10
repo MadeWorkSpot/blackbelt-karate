@@ -23,6 +23,21 @@ export default function LightboxModal({ item, totalItems, currentIndex, onClose,
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleImgError = (e) => {
+    const img = e.currentTarget || e.target;
+    if (!img) return;
+    const currentSrc = img.getAttribute('src') || '';
+    const retries = parseInt(img.dataset.retries || '0', 10);
+    if (retries >= 3) return;
+    img.dataset.retries = (retries + 1).toString();
+
+    if (!currentSrc.includes('public/')) {
+      img.src = 'public/' + currentSrc.replace(/^\//, '');
+    } else {
+      img.src = currentSrc.replace(/^\/?public\//, '');
+    }
+  };
+
   return (
     <div className="modal-overlay" style={{ zIndex: 1000, padding: 0 }}>
       {/* Background backdrop click to close */}
@@ -183,6 +198,7 @@ export default function LightboxModal({ item, totalItems, currentIndex, onClose,
         }}>
           <img
             src={item.image}
+            onError={handleImgError}
             alt={item.title}
             style={{
               maxHeight: isZoomed ? 'none' : '75vh',
